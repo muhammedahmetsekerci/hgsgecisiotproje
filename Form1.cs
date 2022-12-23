@@ -34,7 +34,21 @@ namespace hgsgecisiotproje
         private void button1_Click(object sender, EventArgs e)
         {
             string tarih = dateTimePicker1.Value.AddDays(10).ToString("dd/MM/yyyy");
-            string eventName = "iotproje";
+            
+            string eventName = "";
+            if (smschbox.Checked && mailchbox.Checked)
+            {
+                eventName = "iotproje";
+            }
+            else if (smschbox.Checked)
+            {
+                eventName = "iotprojesms";
+            }
+            else if (mailchbox.Checked)
+            {
+                eventName = "iotprojemail";
+            }
+            
             string secretKey = "ewnhNKulL_QLHdqooYhqKsY_Mr44msi-V7NxIc2Gr2X";
 
             // Set up the HTTP client and request
@@ -74,6 +88,11 @@ namespace hgsgecisiotproje
         {
             FirebaseResponse response = client.Get("bakiye");
             label2.Text = response.ResultAs<string>();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
