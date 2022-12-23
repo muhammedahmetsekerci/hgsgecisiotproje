@@ -33,12 +33,14 @@ namespace hgsgecisiotproje
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string tarih = dateTimePicker1.Value.AddDays(10).ToString("dd/MM/yyyy");
             string eventName = "iotproje";
             string secretKey = "ewnhNKulL_QLHdqooYhqKsY_Mr44msi-V7NxIc2Gr2X";
 
             // Set up the HTTP client and request
             HttpClient client = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://maker.ifttt.com/trigger/{eventName}/with/key/{secretKey}?value1={100+"TL"}value2={dateTimePicker1.Text}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://maker.ifttt.com/trigger/{eventName}/with/key/{secretKey}?value1={"100TL "} &value2={tarih} ");
+
 
             // Send the request and handle the response
             HttpResponseMessage response = client.SendAsync(request).Result;
