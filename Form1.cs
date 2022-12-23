@@ -94,5 +94,47 @@ namespace hgsgecisiotproje
         {
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string tarih = dateTimePicker1.Value.AddDays(10).ToString("dd/MM/yyyy");
+
+            string eventName = "";
+            if (smschbox.Checked && mailchbox.Checked)
+            {
+                eventName = "iotprojeodeme";
+            }
+            else if (smschbox.Checked)
+            {
+                eventName = "iotprojeodemesms";
+            }
+            else if (mailchbox.Checked)
+            {
+                eventName = "iotprojeodememail";
+            }
+
+            string secretKey = "ewnhNKulL_QLHdqooYhqKsY_Mr44msi-V7NxIc2Gr2X";
+
+            // Set up the HTTP client and request
+            HttpClient client = new HttpClient();
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://maker.ifttt.com/trigger/{eventName}/with/key/{secretKey}?value1={"100TL "} &value2={tarih} ");
+            
+            
+            bakiye = bakiye - 100;
+            client.Set("bakiye", bakiye);
+
+            // Send the request and handle the response
+            HttpResponseMessage response = client.SendAsync(request).Result;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                Console.WriteLine("Success");
+
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        }
     }
 }
