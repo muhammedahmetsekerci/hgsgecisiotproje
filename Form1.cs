@@ -1,6 +1,7 @@
 ﻿using FireSharp;
 using FireSharp.Config;
 using FireSharp.Interfaces;
+using FireSharp.Response;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -31,7 +33,6 @@ namespace hgsgecisiotproje
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             string eventName = "iotproje1";
             string secretKey = "ewnhNKulL_QLHdqooYhqKsY_Mr44msi-V7NxIc2Gr2X";
 
@@ -41,14 +42,15 @@ namespace hgsgecisiotproje
 
             // Send the request and handle the response
             HttpResponseMessage response = client.SendAsync(request).Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
-                MessageBox.Show("Success");
-                bakiye = bakiye - 100;
+                response.EnsureSuccessStatusCode();
+                Console.WriteLine("Success");
+                
             }
-            else
+            catch (HttpRequestException ex)
             {
-                MessageBox.Show($"Error triggering event: {response.StatusCode}");
+                Console.WriteLine("Error: " + ex.Message);
             }
         }
 
@@ -64,7 +66,12 @@ namespace hgsgecisiotproje
         private void Form1_Load(object sender, EventArgs e)
         {
             client = new FirebaseClient(config);
+        }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            FirebaseResponse response = client.Get("bakiye");
+            label2.Text = response.ResultAs<string>();
         }
     }
 }
