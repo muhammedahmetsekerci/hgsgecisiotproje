@@ -97,7 +97,7 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
+            this.timer1.Interval = 2000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // label2
@@ -223,7 +223,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -233,6 +232,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox smschbox;
         private System.Windows.Forms.CheckBox mailchbox;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

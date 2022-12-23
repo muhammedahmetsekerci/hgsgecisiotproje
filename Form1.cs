@@ -30,8 +30,20 @@ namespace hgsgecisiotproje
         {
             InitializeComponent();
         }
+        public void bakiyeekle()
+        {
+            client.Set("bakiye", bakiye);
 
-        private void button1_Click(object sender, EventArgs e)
+        }
+        public void hgsgecison()
+        {
+            client.Set("hgsgecis", "gecis yapıldı");
+        }
+        public void hgsgecisoff()
+        {
+            client.Set("hgsgecis", "ödeme yapıldı");
+        }
+    private void button1_Click(object sender, EventArgs e)
         {
             string tarih = dateTimePicker1.Value.AddDays(10).ToString("dd/MM/yyyy");
             
@@ -48,6 +60,11 @@ namespace hgsgecisiotproje
             {
                 eventName = "iotprojemail";
             }
+            else
+            {
+                MessageBox.Show("Mesaj alma tercihleri boş bırakılamaz.!");
+                return;
+            }
             
             string secretKey = "ewnhNKulL_QLHdqooYhqKsY_Mr44msi-V7NxIc2Gr2X";
 
@@ -61,12 +78,11 @@ namespace hgsgecisiotproje
             try
             {
                 response.EnsureSuccessStatusCode();
-                Console.WriteLine("Success");
-                
+                hgsgecison();
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("HATA!: Hata mesajı : " + ex.Message);
             }
         }
 
@@ -76,12 +92,16 @@ namespace hgsgecisiotproje
             bakiye = client.Get("bakiye").ResultAs<int>();
 
             bakiye = bakiye + tutar;
-            client.Set("bakiye", bakiye);
+            bakiyeekle();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             client = new FirebaseClient(config);
+            FirebaseResponse response = client.Get("bakiye");
+            bakiye = response.ResultAs<int>();
+            label2.Text = response.ResultAs<string>();
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -112,6 +132,11 @@ namespace hgsgecisiotproje
             {
                 eventName = "iotprojeodememail";
             }
+            else
+            {
+                MessageBox.Show("Mesaj alma tercihleri boş bırakılamaz.!");
+                return;
+            }
 
             string secretKey = "ewnhNKulL_QLHdqooYhqKsY_Mr44msi-V7NxIc2Gr2X";
 
@@ -120,20 +145,21 @@ namespace hgsgecisiotproje
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://maker.ifttt.com/trigger/{eventName}/with/key/{secretKey}?value1={"100TL "} &value2={tarih} ");
             
             
-            bakiye = bakiye - 100;
-            client.Set("bakiye", bakiye);
+            
 
             // Send the request and handle the response
             HttpResponseMessage response = client.SendAsync(request).Result;
             try
             {
                 response.EnsureSuccessStatusCode();
-                Console.WriteLine("Success");
+                bakiye = bakiye - 100;
+                bakiyeekle();
+                hgsgecisoff();
 
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                MessageBox.Show("HATA!: Hata mesajı : " + ex.Message);
             }
         }
     }
